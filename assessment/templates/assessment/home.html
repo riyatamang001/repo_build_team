@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Assessments</title>
+    <style>
+        body { font-family: Poppins, sans-serif; background:#f9f9f9; margin:0; padding:0; }
+        .container { max-width:900px; margin:50px auto; }
+        h1 { color:#4a2a46; text-align:center; margin-bottom:30px; }
+        .assessment-card { background:#fff; padding:25px; border-radius:12px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center; }
+        .take-btn { padding:10px 18px; background:#4a90e2; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+        .take-btn:hover { background:#3f7fcc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Assessments</h1>
+        {% for assessment in assessments %}
+            <div class="assessment-card">
+                <div>
+                    <strong>{{ assessment.skill_name }}</strong> ({{ assessment.skill_level }})
+                    {% if assessment.verified %}
+                        ✅ Verified
+                    {% else %}
+                        ❌ Not Verified
+                    {% endif %}
+                </div>
+                <a href="{% url 'assessment:take_assessment' assessment.id %}">
+                    <button class="take-btn">Take Assessment</button>
+                </a>
+            </div>
+        {% empty %}
+            <p>No assessments available. Add a skill first.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

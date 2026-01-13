@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skills List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        a {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        .skill-item {
+            margin-bottom: 10px;
+        }
+        .skill-name {
+            font-weight: bold;
+        }
+        .skill-level {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Skills</h1>
+
+    <a href="{% url 'skills:add_skill' %}">Add Skill</a>
+    <hr>
+
+    {% for s in skills %}
+        <div class="skill-item">
+            <span class="skill-name">{{ s.skill }}</span> - 
+            <span class="skill-level">{{ s.level|title }}</span>
+        </div>
+    {% empty %}
+        <p>No skills added yet.</p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Skill</title>
+    <style>
+        body { margin:0; padding:0; font-family:"Poppins",sans-serif; background:#5e2b6b; }
+        .page-wrapper { padding:50px; display:flex; justify-content:center; }
+        .skill-card { background:#f1e6df; width:70%; padding:35px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+        .header-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;}
+        .header-row h2 { font-size:28px; color:#4a2a46; font-weight:bold;}
+        .add-skill-btn { padding:8px 20px; border:2px solid #4a2a46; background:transparent; color:#4a2a46; border-radius:10px; cursor:pointer; font-weight:600;}
+        .skill-item { background:#eadada; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; align-items:center; gap:20px;}
+        .skill-input { width:60%; padding:12px 15px; border-radius:8px; border:1px solid #c7c7c7; font-size:15px;}
+        .level-select { padding:10px 15px; font-size:15px; border:2px solid #4a2a46; border-radius:10px; background:white; cursor:pointer; font-weight:bold;}
+        .save-btn { padding:12px 25px; background:#2ecc71; border:none; border-radius:10px; font-size:16px; font-weight:600; color:white; cursor:pointer;}
+        .save-btn:hover { background:#27ae60; }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="skill-card">
+        <div class="header-row">
+            <h2>Skills</h2>
+            <button class="add-skill-btn" type="button">+ Add skills</button>
+        </div>
+
+        <form method="POST" id="skill-form">
+            {% csrf_token %}
+            <div id="skills-container">
+                <div class="skill-item">
+                    {{ form.skill|add_class:"skill-input"|attr:"placeholder:Enter skill" }}
+                    {{ form.level|add_class:"level-select" }}
+                </div>
+            </div>
+            <button class="save-btn" type="submit">✓ Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const addBtn = document.querySelector('.add-skill-btn');
+    const skillsContainer = document.getElementById('skills-container');
+
+    addBtn.addEventListener('click', () => {
+        const firstSkill = skillsContainer.querySelector('.skill-item');
+        const newSkill = firstSkill.cloneNode(true);
+        newSkill.querySelectorAll('input, select').forEach(input => input.value = '');
+        skillsContainer.appendChild(newSkill);
+    });
+</script>
+</body>
+</html>

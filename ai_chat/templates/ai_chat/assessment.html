@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Assessment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 20px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options label {
+            display: block;
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+        pre.code-block {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button.submit-btn {
+            background-color: #2d9cdb;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.submit-btn:hover {
+            background-color: #2380c6;
+        }
+    </style>
+</head>
+<body>
+
+<h1>AI Generated Assessment Questions</h1>
+
+<form method="POST">
+{% csrf_token %}
+
+{% for r in results %}
+<div class="box">
+    <h2>{{ r.skill }} ({{ r.level }})</h2>
+
+    {% for q in r.questions %}
+    <div class="question">
+        <p><strong>Q{{ forloop.counter }}: {{ q.question_text }}</strong></p>
+
+        {% if q.code %}
+            <pre class="code-block">{{ q.code }}</pre>
+        {% endif %}
+
+        <div class="options">
+            {% for opt in q.options %}
+                <label>
+                    <input type="radio" name="q_{{ r.session_key }}_{{ q.id }}" value="{{ forloop.counter0 }}">
+                    {{ "ABCD"|slice:forloop.counter0|first }}: {{ opt }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<button type="submit" class="submit-btn">Submit</button>
+</form>
+
+</body>
+</html>

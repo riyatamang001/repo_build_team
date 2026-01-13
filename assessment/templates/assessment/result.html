@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment Result</title>
+    <style>
+        body { font-family: Poppins, sans-serif; background:#f9f9f9; margin:0; padding:0; }
+        .container { max-width:500px; margin:100px auto; background:white; padding:30px; border-radius:12px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color:#4a2a46; margin-bottom:20px; }
+        .score { font-size:28px; font-weight:bold; color:#2ecc71; }
+        .home-btn { margin-top:25px; padding:12px 25px; background:#4a90e2; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; text-decoration:none; }
+        .home-btn:hover { background:#3f7fcc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Assessment Completed!</h1>
+        <p>Your Score:</p>
+        <div class="score">{{ score }} / {{ total }}</div>
+        <a href="{% url 'assessment:assessment_home' %}" class="home-btn">Back to Assessments</a>
+    </div>
+</body>
+</html>
