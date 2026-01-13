@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>BuildTeam — Workspaces</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: Segoe UI, Arial
+        }
+
+        body {
+            background: #f6dfd6
+        }
+
+        .topbar {
+            height: 70px;
+            background: linear-gradient(#5c2a62, #37143a);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .brand {
+            font-weight: 700;
+            margin-right: 20px
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 70px)
+        }
+
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(#4b1f57, #2a0d2e);
+            color: #fff;
+            padding: 24px
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px
+        }
+
+        .title {
+            text-align: center;
+            color: #4b1f57;
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 20px
+        }
+
+        .create-btn {
+            border: 2px dotted #4b1f57;
+            padding: 8px 14px;
+            background: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .alert {
+            background: #ff6b6b;
+            padding: 10px 14px;
+            margin-left: 12px
+        }
+
+        .workspace-grid {
+            margin-top: 26px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px
+        }
+
+        .ws-card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .ws-info {
+            display: flex;
+            flex-direction: column
+        }
+
+        .ws-title {
+            font-weight: 700;
+            color: #4b1f57
+        }
+
+        .ws-count {
+            font-size: 13px;
+            color: #666
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="brand">BuildTeam</div>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="avatar">A</div>
+            <div style="margin-top:10px">Ayusha</div>
+            <button style="margin-top:12px;padding:6px 8px;background:rgba(255,255,255,0.15);border:0;color:#fff">Skills
+                +</button>
+        </aside>
+
+        <main class="main">
+            <div class="title">Your Workspace</div>
+
+            <div style="display:flex;align-items:center;">
+                <button id="createWorkspace" class="create-btn"><span style="font-size:18px">+</span> Create new
+                    workspace</button>
+                <div class="alert">Oops! you have not created workspace yet. create one to add members.</div>
+            </div>
+
+            <div class="workspace-grid" id="workspaces"></div>
+        </main>
+    </div>
+
+    <script>
+        // show saved workspaces from localStorage
+        function loadWorkspaces() {
+            const container = document.getElementById('workspaces');
+            container.innerHTML = '';
+            const items = JSON.parse(localStorage.getItem('workspaces') || '[]');
+            if (items.length === 0) {
+                // placeholder card (visual)
+                const placeholder = document.createElement('div');
+                placeholder.className = 'ws-card';
+                placeholder.innerHTML = '<div class="ws-info"><div class="ws-title">No workspace yet</div><div class="ws-count">0 members</div></div>';
+                container.appendChild(placeholder);
+                return;
+            }
+            items.forEach(ws => {
+                const el = document.createElement('div');
+                el.className = 'ws-card';
+                el.innerHTML = `<div class="ws-info">
+        <div class="ws-title">${escapeHtml(ws.title)}</div>
+        <div class="ws-count">${(ws.members || []).length} member${(ws.members || []).length === 1 ? '' : 's'}</div>
+      </div>
+      <div style="font-size:20px">👥</div>`;
+                container.appendChild(el);
+            });
+        }
+
+        function escapeHtml(s) { return (s + '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+        document.getElementById('createWorkspace').addEventListener('click', () => {
+            // clear any draft and start a new draft
+            const draft = { title: '', description: '', members: [] };
+            localStorage.setItem('currentWorkspaceDraft', JSON.stringify(draft));
+            window.location.href = 'workspace-form.html';
+        });
+
+        loadWorkspaces();
+    </script>
+</body>
+
+</html>

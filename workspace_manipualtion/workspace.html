@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>BuildTeam – Workspace</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Segoe UI, Arial
+    }
+
+    :root {
+      --purple-1: #3b0f4b;
+      --purple-2: #5e2b6b;
+      --peach: #f3d9cf;
+      --muted: #8b6f78;
+      --card: #b89697;
+      --bg-dark: #161616;
+      --white: #ffffff;
+      --shadow: 0 6px 18px rgba(11, 5, 10, 0.3);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    body {
+      background: #f6dfd6
+    }
+
+    /* TOP BAR */
+    .topbar {
+      height: 72px;
+      background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      gap: 12px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .topbar-icons {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 700
+    }
+
+    .icons {
+      margin-left: 30px;
+      display: flex;
+      gap: 20px;
+      font-size: 20px
+    }
+
+    .search {
+      margin-left: auto
+    }
+
+    .search input {
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: none;
+      width: 360px;
+    }
+
+    /* LAYOUT */
+    .container {
+      display: flex;
+      height: calc(100vh - 70px)
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(#4b1f57, #2a0d2e);
+      color: #fff;
+      padding: 24px 16px;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .skill-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, .2);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      padding: 30px 40px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #4b1f57;
+      margin-bottom: 20px;
+    }
+
+    /* CREATE WORKSPACE */
+    .create-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .create-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 2px dotted #4b1f57;
+      padding: 6px 12px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .create-btn span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .alert {
+      background: #ff4b4b;
+      color: #000;
+      padding: 10px 14px;
+      font-weight: 600;
+    }
+
+    /* PLACEHOLDER GRID */
+    .workspace-placeholder {
+      background: #b79aa0;
+      padding: 30px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      padding-top: 12px;
+    }
+
+    .ws-card {
+      background: #fff;
+      padding: 14px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ws-title {
+      font-weight: 700;
+      color: #4b1f57;
+    }
+
+    .ws-count {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .line {
+      height: 4px;
+      background: #777;
+      margin-bottom: 14px;
+    }
+
+    .small-line {
+      height: 3px;
+      background: #777;
+      margin-top: 10px;
+    }
+
+    .topbar-search {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .search {
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 18px;
+    }
+
+    .search input {
+      border: none;
+      outline: none;
+      padding: 8px 10px;
+      width: 360px;
+      font-size: 14px;
+      border-radius: 14px;
+    }
+
+    .search-btn {
+      background: var(--purple-1);
+      color: #fff;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    /* Empty state when there are no workspaces (non-red, subtle) */
+    .empty-state {
+      padding: 36px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar" role="navigation" aria-label="Main navigation">
+    <p> <b>Build Team</b></p>
+    <div class="topbar-icons" style="margin-left: 300px;">
+      <a href="home.html" class="icon-btn" aria-label="Home" title="Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
+      <a href="../friend/friend.html" class="icon-btn" aria-label="Team" title="Team">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </a>
+      <button class="icon-btn" title="Chat" aria-label="Chat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button class="icon-btn" title="Notifications" aria-label="Notifications">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+    <div class="topbar-search">
+      <div class="search" role="search">
+        <input id="searchInput" type="search" placeholder="Search for teammate with multiple skills"
+          aria-label="Search" />
+        <button id="searchBtn" class="search-btn" title="Search">🔍</button>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="avatar">O</div>
+        <div>Ayusha</div>
+        <button class="skill-btn">Skills +</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <div class="title">Your Workspace</div>
+
+      <div class="create-row">
+        <a href="workspace-form.html" id="createWorkspace">
+          <div class="create-btn">
+            <span>+</span> Create new workspace
+          </div>
+        </a>
+        <!-- This alert is the only red message and intentionally lives outside the workspace box.
+             It will be shown only when there are no workspaces and hidden automatically once a workspace exists. -->
+        <div class="alert" id="noWorkspaceAlert">
+          Oops! you have not created workspace yet. create one to add members.
+        </div>
+      </div>
+
+      <div class="workspace-placeholder">
+        <div id="workspaceGrid" class="workspace-grid"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // create new draft and go to form (outer create link)
+    document.getElementById('createWorkspace').addEventListener('click', (e) => {
+      e.preventDefault();
+      const draft = { title: '', description: '', members: [] };
+      localStorage.setItem('currentWorkspaceDraft', JSON.stringify(draft));
+      window.location.href = e.currentTarget.href;
+    });
+
+    function loadWorkspaces() {
+      const grid = document.getElementById('workspaceGrid');
+      grid.innerHTML = '';
+      const ws = JSON.parse(localStorage.getItem('workspaces') || '[]');
+      const alertEl = document.getElementById('noWorkspaceAlert');
+
+      if (ws.length === 0) {
+        // Show subtle empty-state inside the workspace box (NOT the red alert)
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.innerHTML = `No workspaces yet — click "Create new workspace" to get started.`;
+        grid.appendChild(empty);
+
+        // show the outer red alert (outside the box)
+        if (alertEl) alertEl.style.display = 'block';
+        return;
+      }
+
+      // we have workspaces => hide the outer alert
+      if (alertEl) alertEl.style.display = 'none';
+
+      ws.forEach(w => {
+        const el = document.createElement('div');
+        el.className = 'ws-card';
+        const memberCount = (w.members || []).length;
+        el.innerHTML = `<div>
+          <div class="ws-title">${escapeHtml(w.title)}</div>
+          <div class="ws-count">${memberCount} member${memberCount === 1 ? '' : 's'}</div>
+        </div><div>👥</div>`;
+        grid.appendChild(el);
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    loadWorkspaces();
+
+    // If other tab updated localStorage, refresh the list
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'workspaces') loadWorkspaces();
+    });
+  </script>
+</body>
+
+</html>

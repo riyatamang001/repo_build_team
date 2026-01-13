@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Select Friends — BuildTeam</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Segoe UI, Arial
+        }
+
+        body {
+            background: #f6dfd6
+        }
+
+        .topbar {
+            height: 70px;
+            background: linear-gradient(#5c2a62, #37143a);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 20px
+        }
+
+        .brand {
+            font-weight: 700
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 70px)
+        }
+
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(#4b1f57, #2a0d2e);
+            color: #fff;
+            padding: 24px
+        }
+
+        .main {
+            flex: 1;
+            padding: 24px;
+            overflow: auto
+        }
+
+        h2 {
+            text-align: center;
+            color: #4b1f57;
+            margin-bottom: 12px
+        }
+
+        /* Friend list */
+        .friend-list {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+        }
+
+        /* checkbox on left side of profile */
+        .select-box {
+            order: 0;
+            margin-right: 10px
+        }
+
+        .friend-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700
+        }
+
+        .friend-meta {
+            flex: 1
+        }
+
+        .friend-name {
+            font-weight: 700;
+            color: #333
+        }
+
+        .friend-skill {
+            font-size: 13px;
+            color: #666;
+            margin-top: 6px
+        }
+
+        /* sticky add button bottom-right */
+        .sticky-add {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            background: #4b1f57;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .sticky-add.disabled {
+            opacity: 0.5;
+            pointer-events: none
+        }
+
+        .note {
+            max-width: 760px;
+            margin: 12px auto;
+            color: #444;
+            font-size: 13px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="brand">BuildTeam</div>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div
+                style="width:60px;height:60px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center">
+                A</div>
+            <div style="margin-top:10px">Ayusha</div>
+        </aside>
+
+        <main class="main">
+            <h2>Select Friends</h2>
+            <div class="note">Use the checkboxes on the left to select members. Click "Add to workspace" to add selected
+                members and return to the form.</div>
+
+            <div id="friendList" class="friend-list"></div>
+        </main>
+    </div>
+
+    <!-- sticky add to workspace button (stays on screen while scrolling) -->
+    <button id="addToWorkspaceBtn" class="sticky-add disabled" title="Add selected to workspace">➕ Add to
+        workspace</button>
+
+    <script>
+        /* friend.html
+           - Shows 3 friends (IDs 1..3)
+           - Checkbox is on the left of each profile
+           - Sticky "Add to workspace" button updates draft.currentWorkspaceDraft.members and returns to workspace-form.html
+        */
+
+        // friend dataset (must match IDs used in workspace-form preview)
+        const FRIENDS = [
+            { id: 1, name: 'Pragun rai', skill: 'Python optimization' },
+            { id: 2, name: 'Rohan shrestha', skill: 'React / Frontend' },
+            { id: 3, name: 'Jiya verma', skill: 'AI Assessment' }
+        ];
+
+        function getDraft() { return JSON.parse(localStorage.getItem('currentWorkspaceDraft') || '{"title":"","description":"","members":[]}'); }
+        function setDraft(d) { localStorage.setItem('currentWorkspaceDraft', JSON.stringify(d)); }
+
+        const listEl = document.getElementById('friendList');
+        const addBtn = document.getElementById('addToWorkspaceBtn');
+
+        // render friend items with checkbox on left
+        function renderFriends() {
+            const draft = getDraft();
+            listEl.innerHTML = '';
+            FRIENDS.forEach(f => {
+                const isChecked = (draft.members || []).includes(f.id);
+                const item = document.createElement('div');
+                item.className = 'friend-item';
+                item.innerHTML = `
+      <div class="select-box"><input type="checkbox" data-id="${f.id}" ${isChecked ? 'checked' : ''}></div>
+      <div class="friend-avatar">${getInitials(f.name)}</div>
+      <div class="friend-meta">
+        <div class="friend-name">${escapeHtml(f.name)}</div>
+        <div class="friend-skill">${escapeHtml(f.skill)}</div>
+      </div>
+    `;
+                listEl.appendChild(item);
+            });
+            updateAddButtonState();
+        }
+
+        function getInitials(name) {
+            return (name || '').split(' ').map(s => s[0] || '').slice(0, 2).join('').toUpperCase();
+        }
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+        // toggle checkbox handler (delegate)
+        listEl.addEventListener('change', (e) => {
+            const cb = e.target.closest('input[type="checkbox"]');
+            if (!cb) return;
+            updateAddButtonState();
+        });
+
+        // enable/disable add button based on selection count
+        function updateAddButtonState() {
+            const checked = Array.from(document.querySelectorAll('#friendList input[type="checkbox"]:checked'));
+            if (checked.length > 0) {
+                addBtn.classList.remove('disabled');
+                addBtn.textContent = `➕ Add ${checked.length} to workspace`;
+            } else {
+                addBtn.classList.add('disabled');
+                addBtn.textContent = '➕ Add to workspace';
+            }
+        }
+
+        // when clicking sticky Add, save selected friend ids to draft and go back to form
+        addBtn.addEventListener('click', () => {
+            if (addBtn.classList.contains('disabled')) return;
+            const checked = Array.from(document.querySelectorAll('#friendList input[type="checkbox"]:checked'));
+            const selectedIds = checked.map(c => Number(c.dataset.id));
+
+            // Save to draft: overwrite members with selectedIds (this matches user's flow)
+            const draft = getDraft();
+            draft.members = selectedIds;
+            setDraft(draft);
+
+            // go back to workspace-form.html
+            window.location.href = '../workspace_manipualtion/workspace-form.html';
+        });
+
+        // Cancel / return via browser back is possible; also expose a storage listener
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'currentWorkspaceDraft') renderFriends();
+        });
+
+        // initial render
+        renderFriends();
+    </script>
+</body>
+
+</html>

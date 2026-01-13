@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuildTeam — Single-page Landing (Feature swap)</title>
+  <style>
+    :root {
+      --bg-start: #4F2959;
+      /* user color */
+      --bg-end: #281046;
+      /* user color */
+      --accent: #f2d7cc;
+      --btn-dark: #2b2a57;
+      --btn-light: #eadbd0;
+      --glass: rgba(255, 255, 255, 0.03);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+    }
+
+    body {
+      background: linear-gradient(180deg, var(--bg-start) 6%, rgba(0, 0, 0, 0.18) 40%, var(--bg-end) 100%);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-y: auto;
+    }
+
+    header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), transparent);
+      z-index: 60
+    }
+
+    .brand {
+      color: var(--accent);
+      font-weight: 700
+    }
+
+    nav {
+      display: flex;
+      gap: 12px
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 0;
+      color: rgba(9, 11, 117, 0.93);
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600
+    }
+
+    .nav-btn.active {
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.3)
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 110px 24px 80px;
+      min-height: calc(100vh - 160px);
+      display: flex;
+      flex-direction: column;
+      gap: 36px
+    }
+
+    .hero {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .hero-left {
+      flex: 1
+    }
+
+    .hero-left h1 {
+      font-size: 28px;
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, 0.95)
+    }
+
+    .hero-left p {
+      color: rgba(255, 255, 255, 0.74);
+      margin: 0
+    }
+
+    .hero-right {
+      width: 420px;
+      max-width: 44%;
+      display: flex;
+      justify-content: center
+    }
+
+    .hero-img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55)
+    }
+
+    /* single panel where content swaps in-place */
+    .feature-shell {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden
+    }
+
+    .feature-title {
+      font-weight: 800;
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: rgba(2, 0, 0, 0.95)
+    }
+
+    .feature-desc {
+      color: rgba(0, 0, 0, 0.7);
+      text-align: center;
+      max-width: 820px;
+      margin-bottom: 18px
+    }
+
+    .feature-mock {
+      background: #e6e6e6;
+      width: 80%;
+      max-width: 720px;
+      height: 170px;
+      border-radius: 4px
+    }
+
+    .pills {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px
+    }
+
+    .pill {
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--btn-dark);
+      color: white;
+      border: 0;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+      transition: transform .12s, box-shadow .12s;
+      position: relative
+    }
+
+    .pill.light {
+      background: var(--btn-light);
+      color: var(--btn-dark);
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.14)
+    }
+
+    .pill:active {
+      transform: translateY(3px);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4)
+    }
+
+    /* small ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple .6s linear;
+      pointer-events: none;
+      background: rgba(255, 255, 255, 0.16)
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(12);
+        opacity: 0
+      }
+    }
+
+    /* black cover inside feature-shell for quick swap */
+    .feature-shell #cover {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s linear;
+      z-index: 5
+    }
+
+    .feature-shell #cover.active {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    /* active state for nav/pills */
+    .active-pill {
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.28)
+    }
+
+    @media (max-width:900px) {
+      .hero {
+        flex-direction: column-reverse;
+        align-items: center
+      }
+
+      .hero-right {
+        width: 80%
+      }
+
+      .feature-mock {
+        height: 140px
+      }
+    }
+
+    #login,
+    #signup {
+      width: 60px;
+      height: 28px;
+      font-size: 14px;
+
+    }
+
+    .all {
+      scroll-snap-type: y mandatory;
+      height: 100vh;
+      overflow-y: scroll;
+    }
+
+    .pills {
+
+      scroll-snap-align: start;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="all">
+    <header>
+      <div class="brand">BuildTeam</div>
+      <nav>
+        <a href="login.html"><BUTton id="login">Login</BUTton></a>
+        <a href="signup.html"><BUTton id="signup">Signup</BUTton></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-left">
+          <h1 style="margin-top: 8px;">Find a TEAMMATE with the skills
+            <br>You're searching for.
+          </h1>
+          <img src="img/_dbfec9b6-3946-46bd-9845-5af5998b2804 2.svg" style="margin-top: 8px;" class="hero-img"
+            alt="illustration" height="300px" witdh=1000px>
+
+      </section>
+  </div>
+  <!-- single feature panel -->
+  <section class="feature-shell" id="feature-shell" role="region" aria-live="polite" style="margin-top: 180px;">
+    <div id="feature-content">
+      <!-- initial content (semantic) rendered by JS on load -->
+    </div>
+
+    <div class="pills" style="position:relative;z-index:2 ; margin-bottom : 220px;">
+      <button class="pill active-pill" data-feature="semantic">Semantic search</button>
+      <button class="pill" data-feature="workspace">Your workspace</button>
+      <button class="pill" data-feature="assessment">Verify skills</button>
+      <button class="pill" data-feature="chat">Chat & Share</button>
+    </div>
+
+    <!-- cover placed inside the panel so only this area blinks -->
+    <div id="cover" aria-hidden="true"></div>
+  </section>
+  </main>
+
+  <script>
+    // run after DOM ready to avoid null selectors
+    document.addEventListener('DOMContentLoaded', () => {
+      // robust ripple helper: accepts either an Event and element or just an element
+      function ripple(eventOrEl, maybeEl) {
+        // determine element and event coordinates
+        let el, clientX, clientY;
+        if (eventOrEl instanceof Event) {
+          // prefer explicit element passed as second arg
+          el = maybeEl || eventOrEl.currentTarget || eventOrEl.target;
+          // if el is not an Element (could be document), try to find nearest button
+          if (!(el instanceof Element)) el = eventOrEl.target.closest('button, [data-feature]');
+          clientX = eventOrEl.clientX || 0;
+          clientY = eventOrEl.clientY || 0;
+        } else {
+          el = eventOrEl; // first arg was element
+          // fallback coordinates: center of element
+          const r = el.getBoundingClientRect();
+          clientX = r.left + r.width / 2;
+          clientY = r.top + r.height / 2;
+        }
+
+        if (!el || !(el instanceof Element)) return; // nothing to do
+
+        // ensure container is positioned so absolute ripple works
+        const prevPosition = el.style.position;
+        const computed = getComputedStyle(el).position;
+        if (computed === 'static') el.style.position = 'relative';
+
+        const rect = el.getBoundingClientRect();
+        const r = document.createElement('span');
+        r.className = 'ripple';
+        // set size and position relative to element
+        const size = Math.max(rect.width, rect.height) * 1.2;
+        r.style.width = r.style.height = size + 'px';
+        // If clientX/Y are zero (keyboard trigger), center the ripple
+        const cx = clientX || (rect.left + rect.width / 2);
+        const cy = clientY || (rect.top + rect.height / 2);
+        r.style.left = (cx - rect.left - size / 2) + 'px';
+        r.style.top = (cy - rect.top - size / 2) + 'px';
+        el.appendChild(r);
+        // cleanup
+        setTimeout(() => {
+          r.remove();
+          // restore inline position style if we modified it
+          if (computed === 'static') el.style.position = prevPosition || '';
+        }, 650);
+      }
+      // templates for each feature (kept small; replace with real markup as needed)
+      const templates = {
+        semantic: `
+          <div class="feature-title">Semantic Search</div>
+          <div class="feature-desc">Provide detailed requirements and our system will find the best match for your project.</div>
+          <div class="feature-mock" aria-hidden="true"></div>
+        `,
+        workspace: `
+          <div class="feature-title">Your Workspace</div>
+          <div class="feature-desc">Create multiple spaces, invite members and organize tasks and files.</div>
+          <div class="feature-mock" aria-hidden="true"></div>
+        `,
+        assessment: `
+          <div class="feature-title">AI Assessment</div>
+          <div class="feature-desc">Smart assessment tools to verify skills and shortlist contributors.</div>
+          <div class="feature-mock" aria-hidden="true"></div>
+        `,
+        chat: `
+          <div class="feature-title">Chat & Share</div>
+          <div class="feature-desc">Communicate in each workspace and share files, code snippets and feedback.</div>
+          <div class="feature-mock" aria-hidden="true"></div>
+        `,
+        hero: `
+          <div class="feature-title">Welcome</div>
+          <div class="feature-desc">Start by selecting a feature to see a quick intro — everything swaps in-place without scrolling.</div>
+          <div class="feature-mock" aria-hidden="true"></div>
+        `
+      };
+
+      const featureShell = document.getElementById('feature-shell');
+      // ensure cover exists inside the panel; if not, create it
+      let cover = featureShell.querySelector('#cover');
+      if (!cover) {
+        cover = document.createElement('div');
+        cover.id = 'cover';
+        cover.setAttribute('aria-hidden', 'true');
+        // keep it as last child so pills are above it via z-index
+        featureShell.appendChild(cover);
+      }
+
+      const contentEl = document.getElementById('feature-content') || (() => {
+        const el = document.createElement('div'); el.id = 'feature-content'; featureShell.prepend(el); return el;
+      })();
+
+      // swap function: quick black cover, replace content, then remove cover quickly
+      function showFeature(name) {
+        // if already showing, just return
+        if (contentEl.dataset.current === name) return;
+
+        // add cover for quick perceived-fast swap
+        cover.classList.add('active');
+
+        // small delay to allow paint
+        setTimeout(() => {
+          // replace content instantly
+          contentEl.innerHTML = templates[name] || templates['hero'];
+          contentEl.dataset.current = name;
+
+          // update active states for pills and header nav
+          document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active-pill', p.dataset.feature === name));
+          document.querySelectorAll('.nav-btn').forEach(n => n.classList.toggle('active', n.dataset.feature === name));
+
+          // remove cover almost immediately so user sees no lag
+          setTimeout(() => cover.classList.remove('active'), 90);
+        }, 40);
+      }
+
+      // initial render
+      showFeature('semantic');
+
+      // wire up buttons: event delegation
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('[data-feature]');
+        if (!btn) return;
+        // call ripple with event and explicit element so helper can compute correctly
+        ripple(e, btn);
+        const name = btn.dataset.feature;
+        showFeature(name);
+      });
+
+      // keyboard shortcuts 1..5
+      window.addEventListener('keydown', e => {
+        if (e.key >= '1' && e.key <= '5') {
+          const map = ['semantic', 'workspace', 'assessment', 'chat', 'hero'];
+          const feature = map[Number(e.key) - 1];
+          if (feature) {
+            // simulate a focused button ripple for keyboard
+            const btn = document.querySelector(`[data-feature="${feature}"]`);
+            if (btn) ripple(btn);
+            showFeature(feature);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

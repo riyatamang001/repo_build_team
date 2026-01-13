@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuildTeam — Dashboard Mock (Profile UI)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-1: #3b0f4b;
+      --purple-2: #5e2b6b;
+      --peach: #f3d9cf;
+      --muted: #8b6f78;
+      --card: #b89697;
+      --bg-dark: #161616;
+      --white: #ffffff;
+      --shadow: 0 6px 18px rgba(11, 5, 10, 0.3);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg-dark);
+      color: #111;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(180deg, var(--purple-2), var(--purple-1));
+      color: var(--white);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .brand {
+      margin-bottom: 24px;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-size: 18px;
+    }
+
+    .user {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--purple-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .skills-btn {
+      background: #fff;
+      color: var(--purple-1);
+      border: none;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .skills-btn .plus {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .skills-panel {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .skills-panel.hidden {
+      display: none;
+    }
+
+    .skills-header {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .skills-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skills-list li {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .skills-add {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .skills-add input {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    .skills-add button {
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--purple-1);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Main column */
+    .main-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), transparent);
+    }
+
+    /* Topbar */
+    .topbar {
+      height: 72px;
+      background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      gap: 12px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-icons {
+      display: flex;
+      gap: 50px;
+      margin-left: 80px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .topbar-search {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .search {
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 18px;
+    }
+
+    .search input {
+      border: none;
+      outline: none;
+      padding: 8px 10px;
+      width: 360px;
+      font-size: 14px;
+      border-radius: 14px;
+    }
+
+    .search-btn {
+      background: var(--purple-1);
+      color: #fff;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    /* Content area: custom for profile card page */
+    .content {
+      padding: 0;
+      background: #d3d4db;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .profile-sections-bg {
+      background: #f3d9cf;
+      padding: 24px 0 24px 0;
+      width: 620px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 800px) {
+      .profile-sections-bg {
+        width: 98vw;
+        max-width: 100%;
+      }
+
+      .content {
+        padding: 0;
+      }
+    }
+
+    /* Profile Section Card */
+    .profile-card {
+      background: #b89697;
+      border-radius: 6px;
+      padding: 18px 22px 18px 22px;
+      margin: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 130px;
+      position: relative;
+    }
+
+    .profile-card label,
+    .profile-section-title {
+      font-weight: 600;
+      font-size: 19px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #222;
+    }
+
+    /* keep edit button visually on the side */
+    .profile-section-title {
+      justify-content: space-between;
+    }
+
+    .title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-icon-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .profile-card .profile-input-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .profile-card .edit-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      margin-left: 6px;
+      color: #111;
+    }
+
+    .profile-input-bar {
+      width: 100%;
+      background: #d3d3d3;
+      border: none;
+      border-radius: 3px;
+      height: 36px;
+      margin-top: 6px;
+      font-size: 16px;
+      padding: 4px 11px;
+      color: #444;
+      outline: none;
+      resize: none;
+      box-sizing: border-box;
+      margin-bottom: 4px;
+    }
+
+    .profile-input-multiline {
+      min-height: 56px;
+      padding-top: 8px;
+    }
+
+    /* Save checkbox/button (blue) */
+    .save-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: none;
+      background: var(--purple-1);
+      color: #fff;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .save-btn.hidden {
+      display: none;
+    }
+
+    /* Edit button hidden state when empty */
+    .edit-btn.hidden {
+      display: none;
+    }
+
+    /* Skills section */
+    .skills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 18px;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .skills-list-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .skill-bar {
+      background: #767575;
+      height: 28px;
+      width: 70%;
+      border-radius: 3px;
+      color: #fff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      padding-left: 13px;
+      font-weight: 500;
+    }
+
+    .add-skill-btn {
+      font-size: 22px;
+      background: transparent;
+      border: none;
+      color: #222;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+
+    /* Remove focus rings from edit/add icons for cleaner look */
+    .edit-btn:focus,
+    .add-skill-btn:focus,
+    .save-btn:focus {
+      outline: none;
+    }
+
+    /* Small responsive tweak for the save button on smaller screens */
+    @media (max-width: 520px) {
+      .save-btn {
+        width: 32px;
+        height: 32px;
+      }
+
+      .search input {
+        width: 180px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-name">BuildTeam</span></div>
+
+      <div class="user">
+        <div class="avatar" aria-hidden="true">A</div>
+        <div class="user-info">
+          <div class="user-name">Ayusha</div>
+          <button id="skillsBtn" class="skills-btn">Skills <span class="plus">+</span></button>
+        </div>
+      </div>
+
+      <div id="skillsPanel" class="skills-panel hidden">
+        <div class="skills-header">Your skills</div>
+        <ul id="skillsList" class="skills-list">
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class="skills-add">
+          <input id="skillInput" type="text" placeholder="Add skill" />
+          <button id="addSkillBtn" type="button">Add</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <!-- Topbar: icons left, search right -->
+      <header class="topbar" role="navigation" aria-label="Main navigation">
+        <div class="topbar-icons" style="margin-left: 300px;">
+
+          <a href="home.html" class="icon-btn" aria-label="Home" title="Home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+
+          <a href="../friend/friend.html" class="icon-btn" aria-label="Team" title="Team">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </a>
+          <button class="icon-btn" title="Chat" aria-label="Chat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="icon-btn" title="Notifications" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="topbar-search">
+          <div class="search" role="search">
+            <input id="searchInput" type="search" placeholder="Search for teammate with multiple skills"
+              aria-label="Search" />
+            <button id="searchBtn" class="search-btn" title="Search">🔍</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content: Profile UI based on provided image -->
+      <main class="content">
+        <div class="profile-sections-bg">
+          <!-- Profile Picture Section -->
+          <section class="profile-card">
+            <div class="profile-icon-add">
+              <svg width="38" height="38" viewBox="0 0 32 32" fill="none" style="margin-right:8px;">
+                <circle cx="16" cy="10" r="6" fill="#767575" />
+                <rect x="4" y="22" width="24" height="6" rx="3" fill="#767575" />
+                <circle cx="25" cy="13" r="5" fill="#bfc1c3" />
+                <circle cx="25" cy="13" r="4" fill="#b89697" />
+                <rect x="22" y="10.5" width="6" height="2" rx="1" fill="#767575" />
+                <rect x="24" y="8.5" width="2" height="6" rx="1" fill="#767575" />
+              </svg>
+              <span>Add Profile Picture</span>
+            </div>
+
+            <!-- Headline -->
+            <div class="profile-section-title">
+              <div class="title-left">
+                Headline
+              </div>
+              <!-- edit button positioned on the side; hidden initially if empty -->
+              <button id="headlineEditBtn" class="edit-btn" title="Edit headline" aria-label="Edit headline">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M4 13.75V16h2.25l8.075-8.075a1.5 1.5 0 0 0-2.121-2.121L4 13.75zm10.085-7.335a2.5 2.5 0 0 1 3.535 3.535l-1.293 1.293a1 1 0 0 1-1.414-1.415l1.293-1.293a.5.5 0 0 0-.707-.707l-1.293 1.293a2 2 0 0 0 2.828 2.829l-1.293 1.293a4 4 0 0 1-5.657-5.657l1.293-1.293z"
+                    stroke="#222" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="profile-input-row" style="margin-top:0;">
+              <input id="headlineInput" type="text" class="profile-input-bar"
+                placeholder="Add a short headline about yourself" readonly />
+              <button id="headlineSave" class="save-btn hidden" title="Save headline"
+                aria-label="Save headline">✓</button>
+            </div>
+          </section>
+
+          <!-- About Section -->
+          <section class="profile-card">
+            <div class="profile-section-title">
+              <div class="title-left">About</div>
+              <button id="aboutEditBtn" class="edit-btn" title="Edit about" aria-label="Edit about">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M4 13.75V16h2.25l8.075-8.075a1.5 1.5 0 0 0-2.121-2.121L4 13.75zm10.085-7.335a2.5 2.5 0 0 1 3.535 3.535l-1.293 1.293a1 1 0 0 1-1.414-1.415l1.293-1.293a.5.5 0 0 0-.707-.707l-1.293 1.293a2 2 0 0 0 2.828 2.829l-1.293 1.293a4 4 0 0 1-5.657-5.657l1.293-1.293z"
+                    stroke="#222" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="profile-input-row" style="align-items:flex-start;">
+              <textarea id="aboutInput" class="profile-input-bar profile-input-multiline"
+                placeholder="Write something about yourself" readonly></textarea>
+              <button id="aboutSave" class="save-btn hidden" title="Save about" aria-label="Save about">✓</button>
+            </div>
+          </section>
+
+          <!-- Skills Section -->
+          <section class="profile-card">
+            <div class="skills-row">
+              Skills
+              <button class="add-skill-btn" title="Add skill" aria-label="Add skill">+</button>
+            </div>
+            <div class="skills-list-box" id="profileSkillsList">
+              <div class="skill-bar">Skill 1</div>
+              <div class="skill-bar">Skill 2</div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Modal retained (hidden) just in case. -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button id="modalClose" class="modal-close" aria-label="Close">×</button>
+      <h3>Create portfolio</h3>
+      <p>Start building your portfolio to showcase your work and attract collaborators.</p>
+      <div class="modal-actions">
+        <button id="modalCreate" class="btn-primary" type="button">Create</button>
+        <button id="modalCancel" class="btn-link" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Panel/modal and search toggle (from original) + headline/about inline edit/save behavior
+    document.addEventListener('DOMContentLoaded', function () {
+      const skillsBtn = document.getElementById('skillsBtn');
+      const skillsPanel = document.getElementById('skillsPanel');
+      const addSkillBtn = document.getElementById('addSkillBtn');
+      const skillInput = document.getElementById('skillInput');
+      const skillsList = document.getElementById('skillsList');
+
+      const modal = document.getElementById('modal');
+      const modalClose = document.getElementById('modalClose');
+      const modalCancel = document.getElementById('modalCancel');
+      const modalCreate = document.getElementById('modalCreate');
+
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+
+      // Sidebar Skills Panel
+      skillsBtn && skillsBtn.addEventListener('click', function () {
+        skillsPanel.classList.toggle('hidden');
+        if (!skillsPanel.classList.contains('hidden')) {
+          setTimeout(() => skillInput.focus(), 60);
+        }
+      });
+      addSkillBtn && addSkillBtn.addEventListener('click', function () {
+        const val = skillInput.value.trim();
+        if (!val) return;
+        const li = document.createElement('li');
+        li.textContent = val;
+        skillsList.appendChild(li);
+        skillInput.value = '';
+      });
+      skillInput && skillInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') addSkillBtn.click();
+      });
+
+      // Modal open/close
+      const createPortfolioBtn = document.getElementById('createPortfolioBtn');
+      createPortfolioBtn && createPortfolioBtn.addEventListener('click', function () {
+        modal.classList.remove('hidden');
+        setTimeout(() => modalCreate.focus(), 80);
+      });
+      modalClose && modalClose.addEventListener('click', () => modal.classList.add('hidden'));
+      modalCancel && modalCancel.addEventListener('click', () => modal.classList.add('hidden'));
+      modalCreate && modalCreate.addEventListener('click', function () {
+        alert('Portfolio created! (demo)');
+        modal.classList.add('hidden');
+      });
+
+      // Search demo
+      searchBtn && searchBtn.addEventListener('click', function () {
+        const q = searchInput.value.trim();
+        if (!q) {
+          alert('Type something to search (demo).');
+        } else {
+          alert('Searching for: ' + q + ' (demo)');
+        }
+      });
+      searchInput && searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') searchBtn.click();
+      });
+
+      // ESC to close modal/panels
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          if (modal && !modal.classList.contains('hidden')) modal.classList.add('hidden');
+          if (skillsPanel && !skillsPanel.classList.contains('hidden')) skillsPanel.classList.add('hidden');
+        }
+      });
+
+      // Click outside modal to close
+      modal && modal.addEventListener('click', function (ev) {
+        if (ev.target === modal) modal.classList.add('hidden');
+      });
+
+      // Add skill to profile card skills box (UI demo)
+      const profileSkillsList = document.getElementById('profileSkillsList');
+      const addSkillProfileBtn = document.querySelector('.add-skill-btn');
+      addSkillProfileBtn && addSkillProfileBtn.addEventListener('click', function () {
+        const skill = prompt('Enter skill to add:');
+        if (skill && skill.trim().length > 0) {
+          const div = document.createElement('div');
+          div.className = 'skill-bar';
+          div.textContent = skill;
+          profileSkillsList.appendChild(div);
+        }
+      });
+
+      // ------- Headline & About edit/save logic -------
+      // Behaviour implemented:
+      // - Clicking the input or the small edit (pencil) puts the field into edit mode.
+      // - While editing, the edit (pencil/finger) is hidden and the blue save checkbox is shown.
+      // - During editing, typing spaces or other input does NOT bring the edit icon back.
+      // - Only after clicking the save (checkbox) does the edit icon return if the saved content is non-empty.
+      // - If the field is empty on load, the edit icon is hidden.
+
+      function setupInlineEditor(options) {
+        // options: { inputEl, saveBtn, editBtn }
+        const { inputEl, saveBtn, editBtn } = options;
+        let isEditing = false;
+
+        // Helper: update edit button visibility depending on content and editing state
+        function updateEditButtonVisibility() {
+          // If currently editing, keep edit button hidden regardless of content
+          if (isEditing) {
+            editBtn.classList.add('hidden');
+            return;
+          }
+
+          const hasValue = (inputEl.tagName === 'TEXTAREA')
+            ? inputEl.value.trim().length > 0
+            : String(inputEl.value || '').trim().length > 0;
+
+          if (hasValue) {
+            editBtn.classList.remove('hidden');
+          } else {
+            editBtn.classList.add('hidden');
+          }
+        }
+
+        // Initial state: hide edit button if field empty
+        updateEditButtonVisibility();
+
+        // Enter edit mode
+        function enterEditMode() {
+          if (isEditing) return;
+          isEditing = true;
+
+          // Show save button, hide edit icon
+          saveBtn.classList.remove('hidden');
+          editBtn.classList.add('hidden');
+
+          // Make input editable
+          inputEl.readOnly = false;
+          inputEl.removeAttribute('aria-readonly');
+
+          // Focus and move caret to end
+          inputEl.focus();
+          try {
+            const len = inputEl.value.length;
+            if (inputEl.setSelectionRange) {
+              setTimeout(() => inputEl.setSelectionRange(len, len), 0);
+            }
+          } catch (e) { /* ignore */ }
+
+          // While editing, we don't want input events to toggle the edit button.
+          // So we don't call updateEditButtonVisibility on input while isEditing === true.
+        }
+
+        // Save changes and exit edit mode
+        function saveChanges() {
+          // Normalize saved content: keep leading/trailing spaces as user typed, but decide visibility based on trimmed content
+          isEditing = false;
+
+          inputEl.readOnly = true;
+          inputEl.setAttribute('aria-readonly', 'true');
+
+          // Hide save button
+          saveBtn.classList.add('hidden');
+
+          // After saving, show edit button only if there's meaningful (non-space) content
+          updateEditButtonVisibility();
+        }
+
+        // Cancel editing (revert to readonly without changing value)
+        function cancelEditing() {
+          isEditing = false;
+          inputEl.readOnly = true;
+          inputEl.setAttribute('aria-readonly', 'true');
+          saveBtn.classList.add('hidden');
+          updateEditButtonVisibility();
+        }
+
+        // Click on input initiates edit mode (per user request)
+        inputEl.addEventListener('click', function () {
+          // If the field is empty, user clicking it should allow typing (enter edit mode).
+          // If the field already has content and is not editing, clicking could also enter edit mode.
+          enterEditMode();
+        });
+
+        // Keyboard: Enter saves for single-line inputs; for textarea, Enter should create newline.
+        inputEl.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && inputEl.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            if (isEditing) {
+              saveChanges();
+            } else {
+              enterEditMode();
+            }
+          } else if (e.key === 'Escape') {
+            // ESC should cancel editing (revert to readonly state)
+            if (isEditing) {
+              cancelEditing();
+            }
+          }
+        });
+
+        // Edit (pencil) button puts field into edit mode
+        editBtn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          enterEditMode();
+        });
+
+        // Save (blue checkbox) click
+        saveBtn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          saveChanges();
+        });
+
+        // Input event: only update stored value -- don't toggle edit button visibility while editing.
+        inputEl.addEventListener('input', function () {
+          // Do nothing to the edit button while editing.
+          // After save, updateEditButtonVisibility() will be called by saveChanges().
+          // However, to keep the behavior consistent if some external code modifies input while not editing, do:
+          if (!isEditing) {
+            updateEditButtonVisibility();
+          }
+        });
+
+        // If focus is lost while editing, keep editing until save or ESC: do not auto-save.
+        inputEl.addEventListener('blur', function () {
+          // keep as-is: we won't auto-save on blur. Save only when user clicks the save btn.
+          // But if they are not editing (just clicked away), make sure edit button visibility is correct.
+          if (!isEditing) {
+            updateEditButtonVisibility();
+          }
+        });
+
+        // Expose a small API on element for tests/debug if needed
+        inputEl._inlineEditorState = {
+          isEditing: () => isEditing,
+          save: saveChanges,
+          cancel: cancelEditing,
+          updateVisibility: updateEditButtonVisibility
+        };
+      }
+
+      // Hook up headline
+      const headlineInput = document.getElementById('headlineInput');
+      const headlineSave = document.getElementById('headlineSave');
+      const headlineEditBtn = document.getElementById('headlineEditBtn');
+
+      // Hook up about
+      const aboutInput = document.getElementById('aboutInput');
+      const aboutSave = document.getElementById('aboutSave');
+      const aboutEditBtn = document.getElementById('aboutEditBtn');
+
+      if (headlineInput && headlineSave && headlineEditBtn) {
+        setupInlineEditor({
+          inputEl: headlineInput,
+          saveBtn: headlineSave,
+          editBtn: headlineEditBtn
+        });
+      }
+
+      if (aboutInput && aboutSave && aboutEditBtn) {
+        setupInlineEditor({
+          inputEl: aboutInput,
+          saveBtn: aboutSave,
+          editBtn: aboutEditBtn
+        });
+      }
+
+      // Ensure edit icons are hidden on load if the fields are empty
+      [headlineInput, aboutInput].forEach(el => {
+        if (!el) return;
+        const editId = (el.id === 'headlineInput') ? 'headlineEditBtn' : 'aboutEditBtn';
+        const btn = document.getElementById(editId);
+        if (!btn) return;
+        if ((el.tagName === 'TEXTAREA' ? el.value.trim() : String(el.value || '').trim()).length === 0) {
+          btn.classList.add('hidden');
+        } else {
+          btn.classList.remove('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
