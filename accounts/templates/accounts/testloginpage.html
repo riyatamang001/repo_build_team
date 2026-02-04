@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BuildTeam — Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --accent: #f6d9cc;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f172a;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        /* Animated Background (Consistent with Landing Page) */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: -50%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59,130,246,0.2), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(30,64,175,0.3), transparent 50%);
+            filter: blur(80px);
+            animation: move 20s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes move {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(10deg) scale(1.1); }
+        }
+
+        .container {
+            width: 850px;
+            height: 500px;
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Left side: Visual/Branding */
+        .left {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.8), rgba(15, 23, 42, 0.9)), 
+                        url('../images/img1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .left p {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Right side: Form */
+        .right {
+            flex: 1.1;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .form-container h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .form-container .subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group input:focus + i {
+            color: var(--primary);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3);
+        }
+
+        .signup-prompt {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .signup-prompt a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .signup-prompt a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+                height: auto;
+            }
+            .left {
+                padding: 30px;
+                height: 180px;
+            }
+            .left h1 { font-size: 1.8rem; }
+            .left p { display: none; }
+            .right {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left">
+        <h1>BuildTeam</h1>
+        <p>Your journey to finding the perfect collaborators starts here.</p>
+    </div>
+
+    <div class="right">
+        <div class="form-container">
+            <h2> Welcome back</h2>
+            <span class="subtitle">Please enter your details</span>
+            
+            <form method="POST" action="{% url 'accounts:login' %}">
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                
+                <div style="text-align: right; margin-bottom: 20px;">
+                    <a href="#" style="font-size: 0.8rem; color: #64748b; text-decoration: none;">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Log in</button>
+            </form>
+
+            <div class="signup-prompt">
+                Don't have an account?<a href="{% url 'accounts:signup' %}">Sign up</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

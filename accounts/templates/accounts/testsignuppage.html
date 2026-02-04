@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildTeam — Join the Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --accent: #f6d9cc;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.15);
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0f172a; /* Deep base color */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* THE AURORA EFFECT */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: -50%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.4), transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.4), transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(96, 165, 250, 0.3), transparent 40%);
+            filter: blur(100px);
+            z-index: -1;
+            animation: auroraMovement 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes auroraMovement {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(2%, 5%) rotate(5deg); }
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            height: 650px; /* Adjusted for stacked name fields */
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Left Side: White Form Section */
+        .signup-section {
+            flex: 1.2;
+            padding: 50px 60px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .signup-section h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .signup-section p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        /* Form Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 18px; /* Vertical spacing */
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            transition: color 0.3s;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 15px 13px 45px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+        }
+
+        .input-group input:focus + i {
+            color: var(--primary);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .signup-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.2);
+        }
+
+        /* Right Side: Dark Info Section */
+        .info-section {
+            flex: 0.8;
+            background: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .info-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .info-section p {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .login-switch-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 12px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .login-switch-btn:hover {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .container {
+                width: 90%;
+                height: auto;
+                flex-direction: column;
+                margin: 20px 0;
+            }
+            .info-section {
+                padding: 40px 20px;
+                order: 2;
+            }
+            .signup-section {
+                padding: 40px 30px;
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="signup-section">
+            <h2>Create Account</h2>
+            <p>Join BuildTeam and find your next collaborator.</p>
+
+            <form method="POST" action="{% url 'accounts:signup' %}">
+                <div class="input-group">
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Create Password" required>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <button type="submit" class="signup-btn">Sign Up</button>
+            </form>
+        </div>
+
+        <div class="info-section">
+            <h3>Welcome Back!</h3>
+            <p>To keep connected with us please login with your personal info.</p>
+            <a href="{% url 'accounts:login' %}" class="login-switch-btn">Login</a>
+        </div>
+    </div>
+
+</body>
+</html>

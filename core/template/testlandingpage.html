@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuildTeam — Single-page Landing</title>
+  <style>
+    :root {
+      --bg-start: #1f3a8a;
+      --bg-end: #0f172a;
+      --accent: #f6d9cc;
+      --btn-dark: #1e40af;
+      --btn-light: #e0e7ff;
+      --glass: rgba(255, 255, 255, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Animated Background */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: -40%;
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(59,130,246,0.3), transparent 60%),
+        radial-gradient(circle at 70% 40%, rgba(96,165,250,0.3), transparent 60%);
+      filter: blur(120px);
+      animation: auroraMove 22s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes auroraMove {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-5%, -10%) rotate(180deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+
+    header {
+      position: fixed;
+      top: 0; width: 100%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .brand { color: var(--accent); font-weight: 700; font-size: 1.2rem; }
+
+    nav { display: flex; gap: 12px; }
+
+    button#login, button#signup {
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      transition: 0.2s;
+    }
+
+    #login { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); }
+    #signup { background: var(--btn-dark); color: white; }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 24px 60px;
+      width: 100%;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 50px;
+      min-height: 400px;
+    }
+
+    .hero-img-container {
+      flex: 0 0 40%;
+    }
+
+    .hero-img {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      display: block;
+    }
+
+    .hero-text-container {
+      flex: 1;
+    }
+
+    .hero-text-container h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.2;
+      margin: 0;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* FEATURE SHELL */
+    .feature-shell {
+      margin-top: 100px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .feature-title { font-size: 24px; font-weight: 700; margin-bottom: 15px; color: #fff; }
+    .feature-desc { color: #94a3b8; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+    
+    .feature-mock {
+      background: rgba(255, 255, 255, 0.05);
+      height: 200px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,0.2);
+    }
+
+    .pills {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .pill.active-pill {
+      background: var(--btn-dark);
+      border-color: #3b82f6;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    /* UPDATED FOOTER */
+    footer {
+      background: rgba(15, 23, 42, 0.8); /* Matches Navbar */
+      color: #ffffff; /* White text */
+      padding: 20px; /* Requested padding */
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+
+    footer p { margin: 0; }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .hero { flex-direction: column; text-align: center; gap: 30px; }
+      .hero-img-container { flex: 0 0 100%; width: 80%; }
+      header { padding: 0 20px; }
+    }
+
+    #cover {
+      position: absolute;
+      inset: 0;
+      background: #0f172a;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+      border-radius: 24px;
+    }
+    #cover.active { opacity: 1; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">BuildTeam</div>
+    <nav>
+      <a href="login.html"><button id="login">Login</button></a>
+      <a href="signup.html"><button id="signup">Signup</button></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-img-container">
+        <img src="./images/img1.jpg" class="hero-img" alt="Team Illustration">
+      </div>
+      <div class="hero-text-container">
+        <h1>Find a TEAMMATE with the skills <br>You're searching for.</h1>
+      </div>
+    </section>
+
+    <section class="feature-shell" id="feature-shell">
+      <div id="feature-content"></div>
+
+      <div class="pills">
+        <button class="pill active-pill" data-feature="semantic">Semantic search</button>
+        <button class="pill" data-feature="workspace">Your workspace</button>
+        <button class="pill" data-feature="assessment">Verify skills</button>
+        <button class="pill" data-feature="chat">Chat & Share</button>
+      </div>
+      
+      <div id="cover"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Copyright © 2023 BuildTeam. All rights reserved.</p> 
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const templates = {
+        semantic: {
+          title: "Semantic Search",
+          desc: "Provide detailed requirements and our system will find the best match for your project."
+        },
+        workspace: {
+          title: "Your Workspace",
+          desc: "Create multiple spaces, invite members and organize tasks and files."
+        },
+        assessment: {
+          title: "AI Assessment",
+          desc: "Smart assessment tools to verify skills and shortlist contributors."
+        },
+        chat: {
+          title: "Chat & Share",
+          desc: "Communicate in each workspace and share files, code snippets and feedback."
+        }
+      };
+
+      const contentEl = document.getElementById('feature-content');
+      const cover = document.getElementById('cover');
+
+      function showFeature(name) {
+        if (contentEl.dataset.current === name) return;
+        
+        cover.classList.add('active');
+
+        setTimeout(() => {
+          const data = templates[name];
+          contentEl.innerHTML = `
+            <div class="feature-title">${data.title}</div>
+            <div class="feature-desc">${data.desc}</div>
+            <div class="feature-mock"></div>
+          `;
+          contentEl.dataset.current = name;
+
+          document.querySelectorAll('.pill').forEach(p => {
+            p.classList.toggle('active-pill', p.dataset.feature === name);
+          });
+
+          setTimeout(() => cover.classList.remove('active'), 100);
+        }, 150);
+      }
+
+      showFeature('semantic');
+
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('[data-feature]');
+        if (btn) showFeature(btn.dataset.feature);
+      });
+    });
+  </script>
+</body>
+</html>
